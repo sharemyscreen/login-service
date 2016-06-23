@@ -1,8 +1,12 @@
 const path = require('path');
 const express = require('express');
 const logger = require('winston');
+const basicAuth = require('./auth/basic');
+const passport = require('passport');
 const bodyParser = require('body-parser');
 const httpHelper = require('sharemyscreen-http-helper');
+
+const userRoute = require('./route/user');
 
 var loginApp = null;
 var loginRouter = null;
@@ -11,15 +15,19 @@ function getApp () {
   logger.info('Initializing login app ...');
   loginApp = express();
   loginApp.use(bodyParser.json());
+  loginApp.use(passport.initialize());
 
   loginRouter = express.Router();
-  
-  //Register all routes
 
-  loginApp.use('/v1',loginRouter);
+  basicAuth.init();
+
+  // Register all routes
+  userRoute.registerRoute(loginRouter);
+
+  loginApp.use('/v1', loginRouter);
   loginApp.use('/doc', express.static(path.join(__dirname, '/doc'), {dotfiles: 'allow'}));
 
-  //Error handler
+  // Error handler
   loginApp.use(function (err, req, res, next) {
     logger.error(err);
     httpHelper.sendReply(res, httpHelper.error.internalServerError(err));

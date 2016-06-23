@@ -1,11 +1,11 @@
 dbConfig:
   host: localhost
   port: 27017
-  dbName: sms-dev
+  dbName: sms
 
 test:
   dbConfig:
-    dbName: sms-dev-test
+    dbName: sms-login-test
 
   server:
     url: http://login.sharemyscreen.local

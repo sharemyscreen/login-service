@@ -1,0 +1,18 @@
+{
+  "client": {
+    "name": "ClientName",
+    "key": "ClientKey",
+    "secret": "ClientSecret"
+  },
+  "user1": {
+    "email": "user1@sms.fr",
+    "password": "password",
+    "first_name": "Maxime",
+    "last_name": "Guedj"
+  },
+  "user2": {
+    "email": "user1@sms.fr",
+    "password": "password",
+    "first_name": "Maxime"
+  }
+}
