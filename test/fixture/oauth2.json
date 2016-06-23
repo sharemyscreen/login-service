@@ -1,0 +1,13 @@
+{
+  "client" : {
+    "name": "Clientt",
+    "key": "Hello",
+    "secret": "Bye"
+  },
+  "user": {
+    "email": "testuser@sms.fr",
+    "password": "password",
+    "first_name": "Maxime",
+    "last_name": "Guedj"
+  }
+}
