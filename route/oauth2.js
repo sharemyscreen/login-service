@@ -1,5 +1,4 @@
 const passport = require('passport');
-const httpHelper = require('sharemyscreen-http-helper');
 const oauth2 = require('../auth/oauth');
 
 function registerRoute (router) {

@@ -31,5 +31,34 @@ server.exchange(oauth2orize.exchange.password(function (client, email, password,
   }
 }));
 
-module.exports.token = [server.token(), server.errorHandler()];
+server.exchange(oauth2orize.exchange.refreshToken(function (client, refreshToken, scope, done) {
+  common.refreshTokenModel.getByClientToken(client, refreshToken, function (err, fRefreshToken) {
+    if (err) {
+      done(err);
+    } else if (fRefreshToken === null) {
+      done(null, false);
+    } else {
+      common.accessTokenModel.createNew(client, fRefreshToken.user, function (err, cAccessToken) {
+        if (err) {
+          done(err);
+        } else {
+          common.refreshTokenModel.createNew(client, fRefreshToken.user, function (err, cRefreshToken) {
+            if (err) {
+              done(err);
+            } else {
+              fRefreshToken.revoke(function (err) {
+                if (err) {
+                  done(err);
+                } else {
+                  return done(null, cAccessToken.token, cRefreshToken.token, { expires_in: cAccessToken.duration, creation: false });
+                }
+              });
+            }
+          });
+        }
+      });
+    }
+  });
+}));
 
+module.exports.token = [server.token(), server.errorHandler()];

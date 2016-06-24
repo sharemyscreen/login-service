@@ -1,0 +1,14 @@
+{
+  "client" : {
+    "name": "CC",
+    "key": "Helloo",
+    "secret": "Byee"
+  },
+  "user": {
+    "email": "testuserr@sms.fr",
+    "password": "refresh",
+    "first_name": "Maxime",
+    "last_name": "Guedj"
+  },
+  "token": "TokenToken"
+}
