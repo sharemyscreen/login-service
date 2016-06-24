@@ -31,7 +31,7 @@ function googleConnect (req, res, next) {
         if (err) {
           httpHelper.sendReply(res, httpHelper.error.invalidGoogleToken());
         } else {
-          common.userModel.getByGoogleId(userInfo['id'], function (err, fUser) {
+          common.userModel.getByEmail(userInfo['email'], function (err, fUser) {
             if (err) {
               next(err);
             } else if (fUser == null) {
@@ -47,6 +47,8 @@ function googleConnect (req, res, next) {
                     sendTokens(res, req.user, cUser, true, next);
                   }
                 });
+            } else if (fUser.googleId !== userInfo['id']) {
+              httpHelper.sendReply(res, httpHelper.error.userExist());
             } else {
               sendTokens(res, req.user, fUser, false, next);
             }
@@ -66,7 +68,7 @@ function facebookConnect (req, res, next) {
       } else if (fbErr) {
         httpHelper.sendReply(res, fbErr);
       } else {
-        common.userModel.getByFacebookId(userInfo.id, function (err, fUser) {
+        common.userModel.getByEmail(userInfo.email, function (err, fUser) {
           if (err) {
             next(err);
           } else if (fUser == null) {
@@ -78,6 +80,8 @@ function facebookConnect (req, res, next) {
                   sendTokens(res, req.user, cUser, true, next);
                 }
               });
+          } else if (fUser.facebookId !== userInfo.id) {
+            httpHelper.sendReply(res, httpHelper.error.userExist());
           } else {
             sendTokens(res, req.user, fUser, false, next);
           }
