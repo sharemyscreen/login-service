@@ -1,0 +1,7 @@
+{
+  "client": {
+    "name": "FacebookConnect",
+    "key": "FacebookConnectKey",
+    "secret": "FacebookConnectSecret"
+  }
+}
