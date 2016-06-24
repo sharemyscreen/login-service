@@ -1,0 +1,7 @@
+{
+  "client": {
+    "name": "GoogleConnect",
+    "key": "GoogleConnectKey",
+    "secret": "GoogleConnectSecret"
+  }
+}

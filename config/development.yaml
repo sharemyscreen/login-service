@@ -3,6 +3,8 @@ dbConfig:
   port: 27017
   dbName: sms
 
+googleApiKey: AIzaSyCp0VnNyEznPykPPhzA660Y1ZGdf0WGUxI
+
 test:
   dbConfig:
     dbName: sms-login-test

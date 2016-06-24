@@ -69,7 +69,6 @@ describe('Testing OAuth2 refresh_token grant (POST /v1/oauth2/token)', function 
         if (err) {
           done(err);
         } else {
-          console.log(res.body);
           expect(res.body.error).to.equal('invalid_grant');
           expect(res.body.error_description).to.equal('Invalid refresh token');
           done();
