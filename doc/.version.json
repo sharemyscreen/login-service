@@ -1,5 +1,13 @@
 [
   {
+    "version": "1.0.0",
+    "author": "guedj_m",
+    "date": "Sat Jun 25 2016 02:47:33 GMT+0200 (CEST)",
+    "changes": [
+      "First stable release"
+    ]
+  },
+  {
     "version": "0.0.0",
     "author": "guedj_m",
     "date": "Sat Jun 25 2016 01:58:00 GMT+0200 (CEST)",
