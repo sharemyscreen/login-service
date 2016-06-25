@@ -1,0 +1,244 @@
+api:
+  name: ShareMyScreen Login service
+  description: |
+    The login service of the ShareMyScreen api allows clients to create user, and retreive **access token** needed to get resources from the api.;;;
+    The *OAuth2 Authorization Framework* as been implemented.
+    For more information, check the {{RFC 6749!https://tools.ietf.org/html/rfc6749}}.;;;
+    The login is available here : {{login.sharemyscreen.fr:3000!http://login.sharemyscreen.fr:3000}};;;
+    The **api** service documentation will be available here {{api.sharemyscreen.fr:3000/doc!http://api.sharemyscreen.fr:3000/doc}}
+
+  paragraphs:
+    -
+      Information:
+        text: |
+          The login service of the ShareMyScreen api allows registred clients to create user, and retreive **access token**.;;;
+          As explained in the {{RFC 6749!https://tools.ietf.org/html/rfc6749}}, obtain an access token is needed to get resources from the api.;;;
+    -
+      Basic Authentication:
+        text: |
+          All requests sent to the login service MUST be authenticated by *Basic Authentication*. Here is the {{RFC!https://tools.ietf.org/html/rfc2617}};;;
+          Basically, you will need include in the **HTTP Header** of the request :;;;
+          ```
+          Authorization: Basic <CLIENT HASH>
+          ```
+          The *<CLIENT HASH>* field is the encoding in **base 64** of your `<client_key>:<client_secret>`.;;;
+          If you don't have created a client yet, check the {{developer server documentation!http://dev.sharemyscreen.fr:3000/doc}} to create one.;;;
+          ;;;
+          If a request is unauthenticated, the server will reply a status code **403** with a body **Unauthorized**.
+    -
+      Tokens:
+        text: |
+          The login service will reply with an {{access object!object-access}}.;;;
+          The **access_token** will allow you to request the api, save it. But it have an expiration date, after it, the token won't work anymore and will have to {{refresh it!routes-v1-oauth2-token-post}}.;;;
+          The **refresh_token** will allow you to refresh your **access_token**.;;;
+          The **creation** field tells if the user was created or not.
+    -
+      Request and Reply format:
+        text: |
+          All requests must be **HTTP** request.;;;
+          Request body must be **JSON** formated.;;;
+          Reply are **JSON** formated object in **snake_case**.
+
+  tags:
+    -
+      Basic Auth:
+        link: paragraph-basic-authentication
+
+  routes:
+    -
+      /v1/user:
+        post:
+          summary: Create a new user
+          tags:
+            - Basic Auth
+          parameters:
+            -
+              email:
+                description: User email
+                in: body
+                type: string
+                required: true
+            -
+              password:
+                description: User password
+                in: body
+                type: string
+                required: true
+            -
+              first_name:
+                description: User first name
+                in: body
+                type: string
+                required: true
+            -
+              last_name:
+                description: User last name
+                in: body
+                type: string
+                required: true
+          responses:
+            -
+              201:
+                description: User created
+                type: User
+          errors:
+            - Invalid request
+            - User exists
+    -
+      /v1/oauth2/token:
+        post:
+          summary: Get an access token
+          description: This endpoint implements the OAuth2 exchange. Two grants are implemented: **password** (get token from user email and password) and **refresh_token** (get a new token from a refresh_token)
+          tags:
+            - Basic Auth
+          parameters:
+            -
+              grant_type:
+                description: Grant type, can be *password* (*email* and *password* fields will be required) or *refresh_token* (*refresh_token* field will be required)
+                in: body
+                type: string
+                required: true
+            -
+              username:
+                description: User email (required for *password* grant)
+                in: body
+                type: string
+                required: false
+            -
+              password:
+                description: User password (required for *password* grant)
+                in: body
+                type: string
+                required: false
+            -
+              refresh_token:
+                description: A refresh token (required for *refresh_token* grant)
+                in: body
+                type: string
+                required: false
+          responses:
+            -
+              200:
+                description: Access granted
+                type: Access
+            -
+              403:
+                description: Invalid grant (something went wrong with supplied params, check error message)
+                type: Short Error
+            -
+              400:
+                description: Invalid request (missing parameter)
+                type: Short Error
+    -
+      /v1/oauth2/google-connect:
+        post:
+          summary: Get an access token with google authentication
+          description: |
+            This route generate accesses from a google access token. If the user does not exist, it create it.;;;
+            /!\ The google access token requires the google scopes: `"https://www.googleapis.com/auth/plus.me", "https://www.googleapis.com/auth/userinfo.email"`
+          tags:
+            - Basic Auth
+          parameters:
+            -
+              access_token:
+                description: The google access token
+                in: body
+                type: string
+                required: true
+          responses:
+            -
+              200:
+                description: Access granted
+                type: Access
+          errors:
+            - Invalid request
+            - Invalid google token
+            - User exists
+    -
+      /v1/oauth2/facebook-connect:
+        post:
+          summary: Get an access token with facebook authentication
+          description: |
+            This route generate accesses from a facebook access token. If the user does not exist, it create it.;;;
+            /!\ The facebook access token requires the facebook scope: `"email"`
+          tags:
+            - Basic Auth
+          parameters:
+            -
+              access_token:
+                description: The facebook access token
+                in: body
+                type: string
+                required: true
+          responses:
+            -
+              200:
+                description: Access granted
+                type: Access
+          errors:
+            - Invalid request
+            - Invalid facebook token
+            - User exists
+
+  errors:
+    -
+      Invalid request:
+        status: 400
+        code: 1
+        message: Invalid request
+        fix: Check the request parameters twice
+    -
+      Invalid google token:
+        status: 400
+        code: 2
+        subcode: 1
+        message: Invalid google token
+        fix: Check token validity and scopes
+    -
+      Invalid facebook token:
+        status: 400
+        code: 3
+        subcode: 1
+        message: Invalid facebook token
+        fix: Check token validity and scopes
+    -
+      User exists:
+        status: 403
+        code: 2
+        subcode: 1
+        message: User exists (email address already in use)
+
+  objects:
+    -
+      Error:
+        description: Error object (sub_code is facultative)
+        obj:
+          code: 0
+          sub_code: 0
+          message: ""
+    -
+      Short Error:
+        description: Error object (Generated by OAuth2 plugin)
+        obj:
+          error: ""
+          error_description: ""
+    -
+      User:
+        description: User object
+        obj:
+          public_id: ""
+          email: ""
+          first_name: ""
+          last_name: ""
+          organization:
+            -
+              array
+    -
+      Access:
+        description: Access object
+        obj:
+          access_token: ""
+          refresh_token: ""
+          expires_in: 3600
+          token_type: "Bearer"
+          creation: true

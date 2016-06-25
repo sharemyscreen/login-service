@@ -1,6 +1,6 @@
 {
   "name": "sharemyscreen-login-service",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "ShareMyScreen login service",
   "main": "index.js",
   "scripts": {

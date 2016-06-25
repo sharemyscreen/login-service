@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.1
+
+* Fix little error in documentation
+
+*guedj_m, Sat Jun 25 2016 19:07:06 GMT+0200 (CEST)*
+
+---
 ## 1.0.0
 
 * First stable release
