@@ -5,5 +5,5 @@ const docGen = require('doc-api-gen').APIDocGen;
 gulp.task('doc', function (done) {
   const pkg = JSON.parse(fs.readFileSync('./package.json'));
 
-  docGen.generateDoc('./dev-service.yaml', './CHANGELOG.md', pkg.version, './doc/', done);
+  docGen.generateDoc('./login-service.yaml', './CHANGELOG.md', pkg.version, './doc/', done);
 });
