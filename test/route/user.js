@@ -7,7 +7,7 @@ const clientModel = require('sharemyscreen-common').clientModel;
 const url = config.get('test.server.url') + ':' + config.get('test.server.port');
 const loginSrv = supertest(url);
 
-describe('Testing user creation (POST /v1/user)', function () {
+describe('Testing user creation (POST /v1/users)', function () {
   before(function (done) {
     clientModel.createFix(fixture.client.name, fixture.client.key, fixture.client.secret, function (err, cClient) {
       if (err) {
@@ -20,7 +20,7 @@ describe('Testing user creation (POST /v1/user)', function () {
 
   it('Should create a new user', function (done) {
     loginSrv
-      .post('/v1/user')
+      .post('/v1/users')
       .send(fixture.user1)
       .set('Content-Type', 'application/json')
       .auth(fixture.client.key, fixture.client.secret)
@@ -41,7 +41,7 @@ describe('Testing user creation (POST /v1/user)', function () {
 
   it('Should reply error when incomplete body', function (done) {
     loginSrv
-      .post('/v1/user')
+      .post('/v1/users')
       .send(fixture.user2)
       .set('Content-Type', 'application/json')
       .auth(fixture.client.key, fixture.client.secret)
@@ -59,7 +59,7 @@ describe('Testing user creation (POST /v1/user)', function () {
 
   it('Should return an error when not authenticated', function (done) {
     loginSrv
-      .post('/v1/user')
+      .post('/v1/users')
       .send(fixture.user1)
       .set('Content-Type', 'application/json')
       .expect(401)
@@ -75,7 +75,7 @@ describe('Testing user creation (POST /v1/user)', function () {
 
   it('Should return an error when bad credential', function (done) {
     loginSrv
-      .post('/v1/user')
+      .post('/v1/users')
       .send(fixture.user1)
       .set('Content-Type', 'application/json')
       .auth(fixture.client.key + 'i', fixture.client.secret)
@@ -92,7 +92,7 @@ describe('Testing user creation (POST /v1/user)', function () {
 
   it('Should return an error when same email', function (done) {
     loginSrv
-      .post('/v1/user')
+      .post('/v1/users')
       .send(fixture.user1)
       .set('Content-Type', 'application/json')
       .auth(fixture.client.key, fixture.client.secret)

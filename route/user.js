@@ -3,7 +3,7 @@ const httpHelper = require('sharemyscreen-http-helper');
 const userModel = require('sharemyscreen-common').userModel;
 
 function registerRoute (router) {
-  router.post('/user', passport.authenticate('basic', { session: false }), createUser);
+  router.post('/users', passport.authenticate('basic', { session: false }), createUser);
 }
 
 function createUser (req, res, next) {

@@ -46,7 +46,7 @@ api:
 
   routes:
     -
-      /v1/user:
+      /v1/users:
         post:
           summary: Create a new user
           tags:
