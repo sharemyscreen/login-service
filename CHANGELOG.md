@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.2
+
+* Update route for user creation from /v1/user to /v1/users
+
+*guedj_m, Sun Jun 26 2016 20:30:56 GMT+0200 (CEST)*
+
+---
 ## 1.0.1
 
 * Fix little error in documentation

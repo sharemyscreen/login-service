@@ -1,5 +1,13 @@
 [
   {
+    "version": "1.0.2",
+    "author": "guedj_m",
+    "date": "Sun Jun 26 2016 20:30:56 GMT+0200 (CEST)",
+    "changes": [
+      "Update route for user creation from /v1/user to /v1/users"
+    ]
+  },
+  {
     "version": "1.0.1",
     "author": "guedj_m",
     "date": "Sat Jun 25 2016 19:07:06 GMT+0200 (CEST)",
