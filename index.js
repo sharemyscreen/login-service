@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 const logger = require('winston');
+const expressWinston = require('express-winston');
 const basicAuth = require('./auth/basic');
 const passport = require('passport');
 const bodyParser = require('body-parser');
@@ -28,6 +29,17 @@ function getApp () {
     res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
     next();
   });
+
+  loginApp.use(expressWinston.logger({
+    transports: [
+      new logger.transports.Console({
+        colorize: true
+      })
+    ],
+    expressFormat: true,
+    colorStatus: true,
+    requestWhitelist: ['url', 'headers']
+  }));
 
   // Register all routes
   userRoute.registerRoute(loginRouter);
