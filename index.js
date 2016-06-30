@@ -1,7 +1,6 @@
 const path = require('path');
 const express = require('express');
 const logger = require('winston');
-const expressWinston = require('express-winston');
 const basicAuth = require('./auth/basic');
 const passport = require('passport');
 const bodyParser = require('body-parser');
