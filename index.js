@@ -12,7 +12,7 @@ const oauth2Route = require('./route/oauth2');
 var loginApp = null;
 var loginRouter = null;
 
-function getApp () {
+function getApp (log) {
   logger.info('Initializing login app ...');
   loginApp = express();
   loginApp.use(bodyParser.json());
@@ -29,7 +29,9 @@ function getApp () {
     next();
   });
 
-  loginApp.use(httpHelper.requestLogger('login'));
+  if (log) {
+    loginApp.use(httpHelper.requestLogger('login'));
+  }
 
   // Register all routes
   userRoute.registerRoute(loginRouter);
