@@ -30,16 +30,7 @@ function getApp () {
     next();
   });
 
-  loginApp.use(expressWinston.logger({
-    transports: [
-      new logger.transports.Console({
-        colorize: true
-      })
-    ],
-    expressFormat: true,
-    colorStatus: true,
-    requestWhitelist: ['url', 'headers']
-  }));
+  loginApp.use(httpHelper.requestLogger('login'));
 
   // Register all routes
   userRoute.registerRoute(loginRouter);
